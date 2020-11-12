@@ -1,0 +1,22 @@
+
+//Product Info
+{
+    "type": "vegetable/ prepared food/ meat /dairy/ grain",
+    "assetID": uint,
+    "price": uint, 
+    "picutres": ["urls for pictures"],
+    "description": "description of product"
+}
+
+// Vendor info
+
+{
+    "Contract Info": {
+        "name": "of the business or person",
+        "phone number": "number",
+        "address": "physical address",
+        "email":
+    },
+    "products": [productIDs]
+}
+
