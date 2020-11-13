@@ -8,6 +8,7 @@ contract FarmersMarket is ERC721{
     using Counters for Counters.Counter;
     
     struct product {
+        sting type;
         uint vendorID;
         string URI; 
         uint available_quantity;
@@ -33,7 +34,7 @@ contract FarmersMarket is ERC721{
    
     
     event RegisterVendor(uint, string, address);
-    event RegisterProduct(uint, string, uint, uint);
+    event RegisterProduct(string ,uint, string, uint, uint);
     event MakePurchase();
     event RemoveVendor(uint);   //just need vendorID
     event RemoveProduct(uint); //just need productID
@@ -54,19 +55,19 @@ contract FarmersMarket is ERC721{
     }
 
 
- function registerProduct (uint typeID, uint vendorID, string memory URI, uint quantity, uint price) 
+ function registerProduct (string type, uint vendorID, string memory URI, uint quantity, uint price) 
         public returns(uint)
     {
         productIDS.increment();
         uint productID = productIDS.current();
         
-        products[productID] = product(typeID, vendorID, URI, quantity, price);
+        products[productID] = product(type, vendorID, URI, quantity, price);
         
         return productID;
     }
 
 
-  function updateProduct(uint productID, uint typeID, uint vendorID, string memory URI, uint quantity, uint price)) public returns(uint){
+  function updateProduct(uint productID, string type, uint vendorID, string memory URI, uint quantity, uint price)) public returns(uint){
         products[productID] = product(typeID, vendorID, URI, quantity, price);
         
         return productID;
