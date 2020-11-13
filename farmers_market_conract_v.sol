@@ -11,7 +11,7 @@ contract FarmersMarket is ERC721{
         string type;
         uint vendorID;
         string URI; 
-        uint available_quantity;
+        uint quantity;
         uint price;
     }
     
