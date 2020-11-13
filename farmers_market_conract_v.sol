@@ -8,7 +8,7 @@ contract FarmersMarket is ERC721{
     using Counters for Counters.Counter;
     
     struct product {
-        sting type;
+        string type;
         uint vendorID;
         string URI; 
         uint available_quantity;
