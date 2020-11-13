@@ -21,7 +21,6 @@ contract FarmersMarket is ERC721{
         
     }
     
-    // we need to link the productID to the vendor ID in the URI? ???
     }
     
     Counters.Counter private productIDS;
@@ -44,12 +43,14 @@ contract FarmersMarket is ERC721{
     }
  
 
- function registerVedor(address vendorAddress, string memory vendorURI) public returns(uint) {
+ function registerVendor(address vendorAddress, string memory vendorURI) public returns(uint) {
         
         vendorIDS.increment();
         uint vendorID = vendorIDS.current();
         
         vendors[vendorID] = vendor(vendorURI, vendorAddress);
+        
+        emit registerVendor(vendorAddress, vendorURI)
         
         return vendorID;
     }
@@ -71,3 +72,23 @@ contract FarmersMarket is ERC721{
         products[productID] = product(typeID, vendorID, URI, quantity, price);
         
         return productID;
+    }
+        
+
+  function removeProduct(uint productID) public returns(uint) {
+        _burn(productID);
+        delete products[productID];
+        return productID;
+    }
+
+  function MakePurchase(uint purchaseDate, uint deliveryDate, uint vendorID, uint productID, uint quantity) public returns(uint) ) {
+      require(purchaseDate <= deliveryDate, "you cannot rent backwards in time");
+      require(quantity < products[productID].quantity, "Out of stock");
+      
+      
+      emit MakePurchase (purchaseDate, deliveryDate, vendorID, productID, quantity);
+      
+      return 
+  }
+
+
