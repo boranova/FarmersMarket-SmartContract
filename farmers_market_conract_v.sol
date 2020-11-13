@@ -50,7 +50,7 @@ contract FarmersMarket is ERC721{
         
         vendors[vendorID] = vendor(vendorURI, vendorAddress);
         
-        emit registerVendor(vendorAddress, vendorURI)
+        emit registerVendor(vendorAddress, vendorURI);
         
         return vendorID;
     }
@@ -63,6 +63,8 @@ contract FarmersMarket is ERC721{
         uint productID = productIDS.current();
         
         products[productID] = product(type, vendorID, URI, quantity, price);
+        
+        emit registerProduct (type, vendorID, URI, qantity, price);
         
         return productID;
     }
