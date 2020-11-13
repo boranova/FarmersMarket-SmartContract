@@ -53,3 +53,20 @@ contract FarmersMarket is ERC721{
         return vendorID;
     }
 
+
+ function registerProduct (uint typeID, uint vendorID, string memory URI, uint quantity, uint price) 
+        public returns(uint)
+    {
+        productIDS.increment();
+        uint productID = productIDS.current();
+        
+        products[productID] = product(typeID, vendorID, URI, quantity, price);
+        
+        return productID;
+    }
+
+
+  function updateProduct(uint productID, uint typeID, uint vendorID, string memory URI, uint quantity, uint price)) public returns(uint){
+        products[productID] = product(typeID, vendorID, URI, quantity, price);
+        
+        return productID;
