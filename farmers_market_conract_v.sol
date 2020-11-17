@@ -7,8 +7,10 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v2.5
 contract FarmersMarket is ERC721{
     using Counters for Counters.Counter;
     
+    address payable public MarketOwner = msg.sender;
+    
     struct product {
-        string type;
+        string product_type;
         uint vendorID;
         string URI; 
         uint quantity;
@@ -17,10 +19,8 @@ contract FarmersMarket is ERC721{
     
     struct vendor {
         string URI;
-        address _address;
+        address payable _address;
         
-    }
-    
     }
     
     Counters.Counter private productIDS;
@@ -32,19 +32,19 @@ contract FarmersMarket is ERC721{
     mapping(uint => vendor) public vendors;
    
     
-    event RegisterVendor(uint, string, address);
+    event RegisterVendor(address, string);
     event RegisterProduct(string ,uint, string, uint, uint);
-    event MakePurchase();
+    event MakePurchase(uint, uint, uint, uint, uint);
     event RemoveVendor(uint);   //just need vendorID
     event RemoveProduct(uint); //just need productID
     event UpdateProductHistory(uint, string);
     
-    constructor("Farmers Market", "FMD") public {
-        
+    constructor(string memory name, string memory symbol) public {
+    
     }
  
 
- function registerVendor(address vendorAddress, string memory vendorURI) public returns(uint) {
+ function registerVendor(address payable vendorAddress, string memory vendorURI) public returns(uint) {
         
         vendorIDS.increment();
         uint vendorID = vendorIDS.current();
@@ -57,22 +57,22 @@ contract FarmersMarket is ERC721{
     }
 
 
- function registerProduct (string type, uint vendorID, string memory URI, uint quantity, uint price) 
+ function registerProduct (string memory product_type, uint vendorID, string memory URI, uint quantity, uint price) 
         public returns(uint)
     {
         productIDS.increment();
         uint productID = productIDS.current();
         
-        products[productID] = product(type, vendorID, URI, quantity, price);
+        products[productID] = product(product_type, vendorID, URI, quantity, price);
         
-        emit RegisterProduct (type, vendorID, URI, qantity, price);
+        emit RegisterProduct (product_type, vendorID, URI, quantity, price);
         
         return productID;
     }
 
 
-  function updateProduct(uint productID, string type, uint vendorID, string memory URI, uint quantity, uint price)) public returns(uint){
-        products[productID] = product(typeID, vendorID, URI, quantity, price);
+  function updateProduct(uint productID, string memory product_type, uint vendorID, string memory URI, uint quantity, uint price) public returns(uint) {
+        products[productID] = product(product_type, vendorID, URI, quantity, price);
         
         return productID;
     }
@@ -84,19 +84,22 @@ contract FarmersMarket is ERC721{
         return productID;
     }
 
-  function MakePurchase(uint purchaseDate, uint deliveryDate, uint vendorID, uint productID, uint quantity) public returns(uint) ) {
-      require(purchaseDate <= deliveryDate, "you cannot rent backwards in time");
+  function makePurchase(uint purchaseDate, uint deliveryDate, uint vendorID, uint productID, uint quantity) public payable returns(uint)  {
+      require(purchaseDate <= deliveryDate, "Date must be in the future");
       require(quantity < products[productID].quantity, "Out of stock");
+      require(quantity * products[productID].price == msg.value, "Price and Quantity Error");
       
+      
+      vendors[vendorID]._address.transfer(msg.value);
       
       emit MakePurchase (purchaseDate, deliveryDate, vendorID, productID, quantity);
       
-      return 
+      return vendorID;
   }
   
   function updateProductHistory(uint productID, string memory URI) public {
       
-      emit UpdateProductHistory(productId, URI);
+      emit UpdateProductHistory(productID, URI);
       
-      return
   }
+}
