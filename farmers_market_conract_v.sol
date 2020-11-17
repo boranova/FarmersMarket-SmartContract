@@ -37,6 +37,7 @@ contract FarmersMarket is ERC721{
     event MakePurchase();
     event RemoveVendor(uint);   //just need vendorID
     event RemoveProduct(uint); //just need productID
+    event UpdateProductHistory(uint, string);
     
     constructor("Farmers Market", "FMD") public {
         
@@ -50,7 +51,7 @@ contract FarmersMarket is ERC721{
         
         vendors[vendorID] = vendor(vendorURI, vendorAddress);
         
-        emit registerVendor(vendorAddress, vendorURI);
+        emit RegisterVendor(vendorAddress, vendorURI);
         
         return vendorID;
     }
@@ -64,7 +65,7 @@ contract FarmersMarket is ERC721{
         
         products[productID] = product(type, vendorID, URI, quantity, price);
         
-        emit registerProduct (type, vendorID, URI, qantity, price);
+        emit RegisterProduct (type, vendorID, URI, qantity, price);
         
         return productID;
     }
@@ -92,5 +93,10 @@ contract FarmersMarket is ERC721{
       
       return 
   }
-
-
+  
+  function updateProductHistory(uint productID, string memory URI) public {
+      
+      emit UpdateProductHistory(productId, URI);
+      
+      return
+  }
