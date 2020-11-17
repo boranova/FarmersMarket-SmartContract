@@ -37,15 +37,23 @@ def pinJSONtoIPFS(json):
     ipfs_hash = r.json()["IpfsHash"]
     return ipfs_hash
     
-def registerVendor(address, URI):
+def registerVendor(address : str, vendor_information : dict):
+    data = convertDataToJSON(vendor_information)
+    ipfs_link = pinJSONtoIPFS(data)
+
+    # call contract to create new vendor
+    tx_hash = FarmersMarket.functions.registerVendor(address, ipfs_link)\
+        .transact({"from": w3.eth.accounts[0]})
+
+    receipt = w3.eth.waitForTransactionReceipt(tx_hash)
+  return receipt
+  
+    
+def registerProduct (product_type, vendorID, URI, quantity, price):
 
   return receipt
   
-def registerProduct (type, vendorID, URI, quantity, price):
-
-  return receipt
-  
-def updateProduct (type, vendorID, URI, quantity, price):
+def updateProduct (product_type, vendorID, URI, quantity, price):
   return receipt
   
 def removeProduct (productID):
