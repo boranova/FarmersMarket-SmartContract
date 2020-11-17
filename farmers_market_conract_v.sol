@@ -35,6 +35,7 @@ contract FarmersMarket is ERC721{
     event RegisterVendor(address, string);
     event RegisterProduct(string ,uint, string, uint, uint);
     event MakePurchase(uint, uint, uint, uint, uint);
+    event ReturnPurchase(uint, uint, uint, uint, uint, address);
     event RemoveVendor(uint);   //just need vendorID
     event RemoveProduct(uint); //just need productID
     event UpdateProductHistory(uint, string);
@@ -79,10 +80,21 @@ contract FarmersMarket is ERC721{
         
 
   function removeProduct(uint productID) public returns(uint) {
+        require(msg.sender == vendors[products[productID].vendorID]._address, "Must be the Vendor to remove a product");
+        
         _burn(productID);
         delete products[productID];
         return productID;
     }
+    
+      function removeVendor(uint vendorID) public returns(uint) {
+        require(msg.sender == MarketOwner, "Must be the MarketOwner to remove a vendor");
+        
+        _burn(vendorID);
+        delete vendors[vendorID];
+        return vendorID;
+    }
+
 
   function makePurchase(uint purchaseDate, uint deliveryDate, uint vendorID, uint productID, uint quantity) public payable returns(uint)  {
       require(purchaseDate <= deliveryDate, "Date must be in the future");
@@ -91,15 +103,28 @@ contract FarmersMarket is ERC721{
       
       
       vendors[vendorID]._address.transfer(msg.value);
+      products[productID].quantity -= quantity;
       
       emit MakePurchase (purchaseDate, deliveryDate, vendorID, productID, quantity);
       
       return vendorID;
   }
   
+  
   function updateProductHistory(uint productID, string memory URI) public {
       
       emit UpdateProductHistory(productID, URI);
       
+  }
+  
+  function returnPurchase(uint purchaseDate, uint deliveryDate, uint vendorID, uint productID, uint quantity, address payable customer_address) public payable returns(uint)  {
+      require(quantity * products[productID].price == msg.value, "Price and Quantity Error");
+      require(msg.sender == vendors[vendorID]._address, "Only the vendor may refund the product");
+      
+      customer_address.transfer(msg.value);
+      
+      emit ReturnPurchase (purchaseDate, deliveryDate, vendorID, productID, quantity, customer_address);
+      
+      return vendorID;
   }
 }
