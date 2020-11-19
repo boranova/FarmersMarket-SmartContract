@@ -32,13 +32,13 @@ contract FarmersMarket is ERC721{
     mapping(uint => vendor) public vendors;
    
     
-    event RegisterVendor(address, string);
-    event RegisterProduct(string ,uint, string, uint, uint);
-    event MakePurchase(uint, uint, uint, uint, uint);
-    event ReturnPurchase(uint, uint, uint, uint, uint, address);
-    event RemoveVendor(uint);   //just need vendorID
-    event RemoveProduct(uint); //just need productID
-    event UpdateProductHistory(uint, string);
+    event RegisterVendor(address vendorAddress, string vendorURI);
+    event RegisterProduct(string product_type,uint vendorID, string URI, uint quantity, uint price);
+    event MakePurchase(uint purchaseDate, uint deliveryDate, uint vendorID, uint productID, uint quantity);
+    event ReturnPurchase(uint purchaseDate, uint deliveryDate, uint vendorID, uint productID, uint quantity, address customer_address);
+    event RemoveVendor(uint vendorID);   //just need vendorID
+    event RemoveProduct(uint productID); //just need productID
+    event UpdateProductHistory(uint productID, string URI);
     
     constructor(string memory name, string memory symbol) public {
     
@@ -87,7 +87,7 @@ contract FarmersMarket is ERC721{
         return productID;
     }
     
-      function removeVendor(uint vendorID) public returns(uint) {
+  function removeVendor(uint vendorID) public returns(uint) {
         require(msg.sender == MarketOwner, "Must be the MarketOwner to remove a vendor");
         
         _burn(vendorID);
