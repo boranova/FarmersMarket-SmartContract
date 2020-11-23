@@ -106,8 +106,10 @@ def register_vendor(vendor_address:str):
         .transact({"from": w3.eth.accounts[0]})
     
     receipt = w3.eth.waitForTransactionReceipt(tx_hash)
+
+    desc = fm_contract.functions.vendors(vendor_id).call()
      
-    return vendor_id, receipt
+    return desc, receipt
 
 # 2. registerProduct
 #
@@ -147,7 +149,9 @@ def register_product(product_type:str,
 
     receipt = w3.eth.waitForTransactionReceipt(tx_hash)
 
-    return product_id, receipt
+    desc = fm_contract.functions.products(product_id).call()
+
+    return desc, receipt
 
 # 3. updateProduct
 #    function updateProduct(uint productID, string memory product_type, uint vendorID, string memory URI, uint quantity, uint price) 
@@ -187,20 +191,22 @@ def update_product(productID:int,
 #    function removeProduct(uint productID) public returns(uint)
 def remove_product(productID:int):
     
-    desc = fm_contract.functions.products(productID).call()
     #call contract to remove product
     tx_hash = fm_contract.functions.removeProduct(
         productID)\
     .transact({"from": w3.eth.accounts[0]})
         
     receipt = w3.eth.waitForTransactionReceipt(tx_hash)
+
+    desc = fm_contract.functions.products(productID).call()
+
     return desc, receipt
 
 # 5. removeVendor
 #     function removeVendor(uint vendorID) public returns(uint)
 def remove_vendor(vendorID:int):
 
-    desc = fm_contract.functions.vendors(vendorID).call()    
+
     #call contract to remove product
     tx_hash = fm_contract.functions.removeVendor(
         vendorID)\
@@ -208,6 +214,7 @@ def remove_vendor(vendorID:int):
         
     receipt = w3.eth.waitForTransactionReceipt(tx_hash)
 
+    desc = fm_contract.functions.vendors(vendorID).call()    
 
     return desc, receipt
 
@@ -229,12 +236,12 @@ def make_purchase(purchaseDate:str,
     purchaseDate = int(purchaseDate.timestamp())
     deliveryDate = int(deliveryDate.timestamp())
 
-    vendor_id = fm_contract.functions.makePurchase(
-        purchaseDate,
-        deliveryDate,
-        vendorID,  
-        productID, 
-        quantity).call({"value":purchase_price})
+#    vendor_id = fm_contract.functions.makePurchase(
+#        purchaseDate,
+#        deliveryDate,
+#        vendorID,  
+#        productID, 
+#        quantity).call({"value":purchase_price})
 
     #call contract and get the msg.value
     tx_hash = fm_contract.functions.makePurchase(
@@ -246,7 +253,10 @@ def make_purchase(purchaseDate:str,
     .transact({"from": w3.eth.accounts[0],"value":purchase_price})
         
     receipt = w3.eth.waitForTransactionReceipt(tx_hash)
-    return vendor_id, receipt    
+
+    desc = fm_contract.functions.products(productID).call()   
+
+    return desc, receipt    
 
 # 7. updateProductHistory
 #   function updateProductHistory(uint productID, string memory URI) public
@@ -312,6 +322,11 @@ def return_purchase(purchaseDate:str,
 
 
 # view funtions for testing
+def getVendors(vendorId):
+    
+    desc = fm_contract.functions.vendors(vendorID).call()
+    return desc
+
 def getLatestVendor():
     ipfs_hash = fm_contract.functions.getLatestVendor().call()
     message = requests.get(f"https://cloudflare-ipfs.com/ipfs/{ipfs_hash}")
@@ -332,8 +347,11 @@ def vendor_report ():
     return vendor_filter.get_all_entries()
 
 def product_report ():
-    product_filter = fm_contract.events.RegisterProduct.createFilter(fromBlock="0x0")
-    return product_filter.get_all_entries()
+
+    product_reg = fm_contract.events.RegisterProduct.createFilter(fromBlock="0x0")
+    product_update = fm_contract.events.UpdateProduct.createFilter(fromBlock="0x0")
+    #return product_filter.get_all_entries()
+    return product_reg.get_all_entries()+product_update.get_all_entries()
 
 def product_history_report(productID):
     history = fm_contract.events.UpdateProductHistory.createFilter(fromBlock="0x0", argument_filters={"productID": productID})
@@ -385,17 +403,18 @@ if __name__ == "__main__":
             vendor_id = input("Enter a vendor ID to remove vendor:")
 
             vendor, receipt = remove_vendor(int(vendor_id))
-            ipfs_hash = vendor[0]
-            message = requests.get(f"https://cloudflare-ipfs.com/ipfs/{ipfs_hash}")
+            #ipfs_hash = vendor[0]
+            #message = requests.get(f"https://cloudflare-ipfs.com/ipfs/{ipfs_hash}")
 
-            print(message.json())
+            #print(message.json())
+            print(vendor)
             
         #3. Register Product
         if option == "3":
             product_type = input("Enter the product type: ")
             vendorID = input("Enter the vendor ID: ")
             quantity = input("Enter the product quantity: ")
-            price = input("Enter the product price:")
+            price = input("Enter the product price: ")
             description = input("Enter the product description: ")
 
             product_id, receipt = register_product(product_type, 
