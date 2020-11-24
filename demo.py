@@ -515,7 +515,7 @@ if __name__ == "__main__":
             for i in range(len(report)):
                 ipfs_hash = report[i]['args']['vendorURI']
                 message = requests.get(f"https://cloudflare-ipfs.com/ipfs/{ipfs_hash}")
-                print(message.json())
+                print(i+1, message.json())
 
         # c. Get a list of products
         if option == "c":
@@ -523,7 +523,7 @@ if __name__ == "__main__":
             for i in range(len(report)):
                 #ipfs_hash = report[i]['args']
                 #message = requests.get(f"https://cloudflare-ipfs.com/ipfs/{ipfs_hash}")
-                print(dict(report[i]['args']))
+                print(i+1, dict(report[i]['args']))
 
 
         # d. Get a product's history 
