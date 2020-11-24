@@ -72,31 +72,31 @@
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "",
+				"name": "purchaseDate",
 				"type": "uint256"
 			},
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "",
+				"name": "deliveryDate",
 				"type": "uint256"
 			},
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "",
+				"name": "vendorID",
 				"type": "uint256"
 			},
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "",
+				"name": "productID",
 				"type": "uint256"
 			},
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "",
+				"name": "quantity",
 				"type": "uint256"
 			}
 		],
@@ -109,31 +109,31 @@
 			{
 				"indexed": false,
 				"internalType": "string",
-				"name": "",
+				"name": "product_type",
 				"type": "string"
 			},
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "",
+				"name": "vendorID",
 				"type": "uint256"
 			},
 			{
 				"indexed": false,
 				"internalType": "string",
-				"name": "",
+				"name": "URI",
 				"type": "string"
 			},
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "",
+				"name": "quantity",
 				"type": "uint256"
 			},
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "",
+				"name": "price",
 				"type": "uint256"
 			}
 		],
@@ -146,13 +146,13 @@
 			{
 				"indexed": false,
 				"internalType": "address",
-				"name": "",
+				"name": "vendorAddress",
 				"type": "address"
 			},
 			{
 				"indexed": false,
 				"internalType": "string",
-				"name": "",
+				"name": "vendorURI",
 				"type": "string"
 			}
 		],
@@ -165,7 +165,7 @@
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "",
+				"name": "productID",
 				"type": "uint256"
 			}
 		],
@@ -178,7 +178,7 @@
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "",
+				"name": "vendorID",
 				"type": "uint256"
 			}
 		],
@@ -191,37 +191,37 @@
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "",
+				"name": "purchaseDate",
 				"type": "uint256"
 			},
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "",
+				"name": "deliveryDate",
 				"type": "uint256"
 			},
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "",
+				"name": "vendorID",
 				"type": "uint256"
 			},
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "",
+				"name": "productID",
 				"type": "uint256"
 			},
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "",
+				"name": "quantity",
 				"type": "uint256"
 			},
 			{
 				"indexed": false,
 				"internalType": "address",
-				"name": "",
+				"name": "customer_address",
 				"type": "address"
 			}
 		],
@@ -259,13 +259,56 @@
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "",
+				"name": "productID",
 				"type": "uint256"
 			},
 			{
 				"indexed": false,
 				"internalType": "string",
-				"name": "",
+				"name": "product_type",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "vendorID",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "URI",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "quantity",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "price",
+				"type": "uint256"
+			}
+		],
+		"name": "UpdateProduct",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "productID",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "URI",
 				"type": "string"
 			}
 		],
