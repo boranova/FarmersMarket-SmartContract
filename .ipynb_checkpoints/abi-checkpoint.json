@@ -265,49 +265,6 @@
 			{
 				"indexed": false,
 				"internalType": "string",
-				"name": "product_type",
-				"type": "string"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "vendorID",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "string",
-				"name": "URI",
-				"type": "string"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "quantity",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "price",
-				"type": "uint256"
-			}
-		],
-		"name": "UpdateProduct",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "productID",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "string",
 				"name": "URI",
 				"type": "string"
 			}

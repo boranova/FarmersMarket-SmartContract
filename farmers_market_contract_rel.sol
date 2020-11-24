@@ -38,6 +38,7 @@ contract FarmersMarket is ERC721{
     event ReturnPurchase(uint purchaseDate, uint deliveryDate, uint vendorID, uint productID, uint quantity, address customer_address);
     event RemoveVendor(uint vendorID);   //just need vendorID
     event RemoveProduct(uint productID); //just need productID
+    event UpdateProduct(uint productID, string product_type,uint vendorID, string URI, uint quantity, uint price);
     event UpdateProductHistory(uint productID, string URI);
     
     constructor(string memory name, string memory symbol) public {
@@ -75,34 +76,40 @@ contract FarmersMarket is ERC721{
   function updateProduct(uint productID, string memory product_type, uint vendorID, string memory URI, uint quantity, uint price) public returns(uint) {
         products[productID] = product(product_type, vendorID, URI, quantity, price);
         
+        emit UpdateProduct(productID, product_type, vendorID, URI, quantity, price);
+        
         return productID;
     }
         
 
   function removeProduct(uint productID) public returns(uint) {
-        require(msg.sender == vendors[products[productID].vendorID]._address, "Must be the Vendor to remove a product");
+        require(msg.sender == MarketOwner || msg.sender == vendors[products[productID].vendorID]._address, "Must be the Vendor to remove a product");
         
-        _burn(productID);
+        //_burn(productID);
         delete products[productID];
+        emit RemoveProduct(productID);
         return productID;
     }
     
   function removeVendor(uint vendorID) public returns(uint) {
         require(msg.sender == MarketOwner, "Must be the MarketOwner to remove a vendor");
         
-        _burn(vendorID);
+        //_burn(vendorID);
         delete vendors[vendorID];
+        emit RemoveVendor(vendorID);
         return vendorID;
     }
 
 
   function makePurchase(uint purchaseDate, uint deliveryDate, uint vendorID, uint productID, uint quantity) public payable returns(uint)  {
       require(purchaseDate <= deliveryDate, "Date must be in the future");
-      require(quantity < products[productID].quantity, "Out of stock");
+      require(quantity <= products[productID].quantity, "Out of stock");
       require(quantity * products[productID].price == msg.value, "Price and Quantity Error");
-      
+      //require(products[productID].price == msg.value, "Price Error");      
       
       vendors[vendorID]._address.transfer(msg.value);
+      //vendors[vendorID]._address.transfer(quantity * msg.value);
+      
       products[productID].quantity -= quantity;
       
       emit MakePurchase (purchaseDate, deliveryDate, vendorID, productID, quantity);
@@ -118,10 +125,15 @@ contract FarmersMarket is ERC721{
   }
   
   function returnPurchase(uint purchaseDate, uint deliveryDate, uint vendorID, uint productID, uint quantity, address payable customer_address) public payable returns(uint)  {
+
+      //require(quantity <= products[productID].quantity, "Quantity Error");      
+      //require(products[productID].price == msg.value, "Price Error");
       require(quantity * products[productID].price == msg.value, "Price and Quantity Error");
-      require(msg.sender == vendors[vendorID]._address, "Only the vendor may refund the product");
+      
+      require(msg.sender == MarketOwner || msg.sender == vendors[vendorID]._address, "Only the vendor may refund the product");
       
       customer_address.transfer(msg.value);
+      //customer_address.transfer(quantity * msg.value);
       
       emit ReturnPurchase (purchaseDate, deliveryDate, vendorID, productID, quantity, customer_address);
       
